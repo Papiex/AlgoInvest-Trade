@@ -1,11 +1,12 @@
-from utils import read_actions_csv
+from utils import read_actions_csv, print_action_by_action
 
 import sys
+from time import perf_counter
 
 
-def calculate_profit(price, profit) -> float:
+def calculate_profit(price, percentage) -> float:
     """calculate profit of action and return benefit"""
-    profit = profit / 100
+    profit = percentage / 100
     profit = price * profit
     profit = round(profit, 2)
 
@@ -20,24 +21,22 @@ def calculate_ratio(price, benefit) -> float:
     return ratio
 
 
-def add_benefit_to_dict(actions) -> dict:
+def add_profit_to_dict(actions) -> dict:
     """convert action profit percentage to amount and add to action dict"""
     for action in actions:
-        actions[action]["action_benefit"] = calculate_profit(
-            actions[action]["price"], actions[action]["profit"]
+        actions[action]["profit"] = calculate_profit(
+            actions[action]["price"], actions[action]["percentage"]
         )
-
     return actions
 
 
 def add_ratio_to_dict(actions) -> dict:
     """calculate the ratio and add in to action dict"""
-    actions_dict = add_benefit_to_dict(actions)
+    actions_dict = add_profit_to_dict(actions)
     for action in actions_dict:
         actions_dict[action]["ratio"] = calculate_ratio(
-            actions_dict[action]["price"], actions_dict[action]["action_benefit"]
+            actions_dict[action]["price"], actions_dict[action]["profit"]
         )
-
     return actions_dict
 
 
@@ -56,6 +55,7 @@ def sort_profits(actions) -> dict:
 
 def calculate_best_placements(csv_file):
     """Calculate the best placements with 500 budget"""
+    start_time = perf_counter()
     actions = read_actions_csv(csv_file)
     actions_sorted = sort_profits(actions)
     budget = 0
@@ -68,11 +68,15 @@ def calculate_best_placements(csv_file):
             continue
         else:
             budget += actions_sorted[action]["price"]
-            profit += actions_sorted[action]["action_benefit"]
+            profit += actions_sorted[action]["profit"]
             best_actions.append(action)
+    elapsed_time = perf_counter() - start_time
 
     print(
-        f"la dépense totale est de {budget}€ sur {max_cost}€ pour un bénéfice total de {round(profit, 2)}€."
+        f"[Dépense totale: {budget}€ sur {max_cost}€]\n"
+        f"[Bénéfice total: {round(profit, 2)}€] \n"
+        f"[Temps d'éxécution: {elapsed_time:.3f}] \n"
+        f"Avec cette liste d'action: \n {best_actions}"
     )
 
 
