@@ -1,13 +1,14 @@
 import itertools
+import sys
 
 from utils import read_actions_csv
 
 
-def get_best_combinations():
+def get_best_combinations(csv_file):
     """get the best combinations with bruteforce"""
 
     # Dictionnaire d'actions
-    actions = read_actions_csv("dataset/dataset_test.csv")
+    actions = read_actions_csv(csv_file)
 
     # Ajouter le bénéfice pour chaque action
     for action in actions:
@@ -40,4 +41,10 @@ def get_best_combinations():
     print("Bénéfice total: ", round(max_profit, 2), "euros")
 
 
-get_best_combinations()
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Error: You need to specify a csv_file [py script.py csv_file_name]")
+        sys.exit(1)
+
+    csv_file = sys.argv[1]
+    get_best_combinations(csv_file)
