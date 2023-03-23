@@ -1,4 +1,4 @@
-from utils import read_actions_csv, print_action_by_action
+from utils import read_actions_csv
 
 import sys
 from time import perf_counter

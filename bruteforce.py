@@ -11,12 +11,12 @@ def get_best_combinations(csv_file):
     # Dictionnaire d'actions
     actions = read_actions_csv(csv_file)
 
-    # Ajouter le bénéfice pour chaque action
+    # Ajouter le profit pour chaque action
     for action in actions:
         price = actions[action]["price"]
         percentage = actions[action]["percentage"]
         benefit = price * percentage / 100
-        actions[action]["benefit"] = benefit
+        actions[action]["profit"] = benefit
 
     # Trouver la combinaison optimale d'actions
     max_budget = 500
@@ -31,7 +31,7 @@ def get_best_combinations(csv_file):
             #print(count, end="\r")
             total_price = sum([actions[action]["price"] for action in combination])
             if total_price <= max_budget:
-                total_benefit = sum([actions[action]["benefit"] for action in combination])
+                total_benefit = sum([actions[action]["profit"] for action in combination])
                 if total_benefit > max_profit:
                     max_profit = total_benefit
                     max_combination = combination
