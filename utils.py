@@ -19,13 +19,6 @@ def read_actions_csv(csv_file) -> dict:
     return actions
 
 
-def print_action_by_action(actions, message):
-    """"""
-    print(message)
-    for key, value in actions.items():
-        print(key, value)
-
-
 def do_we_skip_the_first_line(csv_file):
     """if first line of csv contains strings like 'profit' etc... skip the first line"""
     with open(csv_file, newline="") as csvfile:
